@@ -10,6 +10,8 @@ class Shortlinks
         add_action('wp', array($this, 'simpleRedirect'));
         // add_action('save_post_custom-short-link', array($this, 'writeToHtaccess'));
 
+        add_action('edit_form_after_title', array($this, 'afterTitle'));
+
         add_filter('enter_title_here', array($this, 'titlePlaceholder'));
     }
 
@@ -43,8 +45,8 @@ class Shortlinks
         $args = array(
             'labels'               => $labels,
             'description'          => __($description, 'custom-short-links'),
-            'public'               => true,
-            'publicly_queriable'   => true,
+            'public'               => false,
+            'publicly_queriable'   => false,
             'show_ui'              => true,
             'show_in_nav_menus'    => false,
             'show_in_menu'         => true,
@@ -97,7 +99,7 @@ class Shortlinks
 
             // 301 or 302
             default:
-                header('Location: ' . $redirectTo, true, intval($fields['custom_short_links_redirect_method']));
+                wp_redirect($redirectTo, intval($fields['custom_short_links_redirect_method']));
                 break;
         }
     }
@@ -175,5 +177,23 @@ class Shortlinks
         }
 
         return $placeholder;
+    }
+
+    public function afterTitle()
+    {
+        global $post;
+        $screen = get_current_screen();
+
+        if ($screen->post_type != 'custom-short-link') {
+            return;
+        }
+
+        if (isset($_GET['action']) && $_GET['action'] == 'edit') {
+            echo '<div id="edit-slug-box">
+                <strong>' . __('Shortlink', 'custom-short-links') . '</strong>: ' . home_url() . '/' . $post->post_title . '
+            </div>';
+        } elseif ($screen->action == 'add') {
+            echo '<div id="edit-slug-box"></div>';
+        }
     }
 }
