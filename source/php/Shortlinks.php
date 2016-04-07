@@ -190,7 +190,7 @@ class Shortlinks
 
         if (isset($_GET['action']) && $_GET['action'] == 'edit') {
             echo '<div id="edit-slug-box">
-                <strong>' . __('Shortlink', 'custom-short-links') . '</strong>: ' . home_url() . '/' . $post->post_title . '
+                <strong>' . __('Shortlink', 'custom-short-links') . '</strong>: <a href="' . home_url() . '/' . $post->post_title . '">' . home_url() . '/' . $post->post_title . '</a>
             </div>';
         } elseif ($screen->action == 'add') {
             echo '<div id="edit-slug-box"></div>';
