@@ -7,6 +7,7 @@ class App
     public function __construct()
     {
         new \CustomShortLinks\Shortlinks();
+        new \CustomShortLinks\Enqueue();
 
         add_action('init', array($this, 'init'));
     }

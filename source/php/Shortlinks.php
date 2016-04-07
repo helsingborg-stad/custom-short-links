@@ -7,8 +7,15 @@ class Shortlinks
     public function __construct()
     {
         add_action('init', array($this, 'registerPostType'));
+        add_action('wp', array($this, 'handleRedirect'));
+
+        add_filter('enter_title_here', array($this, 'titlePlaceholder'));
     }
 
+    /**
+     * Register shortlinks posttype
+     * @return void
+     */
     public function registerPostType()
     {
         $nameSingular = 'Shortlink';
@@ -25,7 +32,7 @@ class Shortlinks
             'new_item'           => sprintf(__('New %s', 'custom-short-links'), $nameSingular),
             'edit_item'          => sprintf(__('Edit %s', 'custom-short-links'), $nameSingular),
             'view_item'          => sprintf(__('View %s', 'custom-short-links'), $nameSingular),
-            'all_items'          => sprintf(__('Edit %s', 'custom-short-links'), $namePlural),
+            'all_items'          => sprintf(__('All %s', 'custom-short-links'), $namePlural),
             'search_items'       => sprintf(__('Search %s', 'custom-short-links'), $namePlural),
             'parent_item_colon'  => sprintf(__('Parent %s', 'custom-short-links'), $namePlural),
             'not_found'          => sprintf(__('No %s', 'custom-short-links'), $namePlural),
@@ -41,7 +48,10 @@ class Shortlinks
             'show_in_nav_menus'    => false,
             'show_in_menu'         => true,
             'has_archive'          => false,
-            'rewrite'              => false,
+            'rewrite'              => array(
+                'slug'       => '/',
+                'with_front' => false
+            ),
             'hierarchical'         => false,
             'menu_position'        => 100,
             'exclude_from_search'  => true,
@@ -49,6 +59,27 @@ class Shortlinks
             'supports'             => array('title')
         );
 
-        register_post_type('custom-short-links', $args);
+        register_post_type('custom-short-link', $args);
+    }
+
+    public function handleRedirect()
+    {
+
+    }
+
+    /**
+     * Changes the title input placeholder in WP Admin
+     * @param  string $placeholder Original placeholder
+     * @return string              New placeholder
+     */
+    public function titlePlaceholder($placeholder)
+    {
+        $screen = get_current_screen();
+
+        if ($screen->post_type == 'custom-short-link') {
+            $placeholder = __('Enter shortlink');
+        }
+
+        return $placeholder;
     }
 }
