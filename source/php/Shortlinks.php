@@ -7,7 +7,8 @@ class Shortlinks
     public function __construct()
     {
         add_action('init', array($this, 'registerPostType'));
-        add_action('wp', array($this, 'handleRedirect'));
+        add_action('wp', array($this, 'simpleRedirect'));
+        // add_action('save_post_custom-short-link', array($this, 'writeToHtaccess'));
 
         add_filter('enter_title_here', array($this, 'titlePlaceholder'));
     }
@@ -48,10 +49,7 @@ class Shortlinks
             'show_in_nav_menus'    => false,
             'show_in_menu'         => true,
             'has_archive'          => false,
-            'rewrite'              => array(
-                'slug'       => '/',
-                'with_front' => false
-            ),
+            'rewrite'              => false,
             'hierarchical'         => false,
             'menu_position'        => 100,
             'exclude_from_search'  => true,
@@ -62,18 +60,23 @@ class Shortlinks
         register_post_type('custom-short-link', $args);
     }
 
-    public function handleRedirect()
+    /**
+     * Make a simple PHP redirect to the target page
+     * @return void
+     */
+    public function simpleRedirect()
     {
-        global $post;
+        $currentUrl = trim($_SERVER['REQUEST_URI'], '/');
+        $post = get_page_by_title($currentUrl, 'OBJECT', 'custom-short-link');
 
-        if (!isset($post) || !is_a($post, 'WP_Post') || $post->post_type != 'custom-short-link' || is_admin()) {
+        if (!$post) {
             return;
         }
 
         $fields = get_fields($post->ID);
         $redirectTo = null;
 
-
+        // Find redirect url
         switch ($fields['custom_short_links_redirect_url_type']) {
             case 'external':
                 $redirectTo = $fields['custom_short_links_redirect_to_external'];
@@ -84,6 +87,7 @@ class Shortlinks
                 break;
         }
 
+        // Make redirect with selected method
         switch ($fields['custom_short_links_redirect_method']) {
             case 'meta':
                 add_action('wp_head', function () use ($fields, $redirectTo) {
@@ -96,7 +100,65 @@ class Shortlinks
                 header('Location: ' . $redirectTo, true, intval($fields['custom_short_links_redirect_method']));
                 break;
         }
+    }
 
+    /**
+     * Write RewriteRules for redirect to the .htaccess
+     *
+     * TODO:
+     * This function appends the rules to the bottom of the htaccess.
+     * The default wordpress rules makes these rules not to read, if put above the Wordpress rules howerever, everything works.
+     * This needs to be fixed somehow so that the rules is beeing read even if they're in the bottom
+     *
+     * @param  [type] $postId [description]
+     * @return [type]         [description]
+     */
+    public function writeToHtaccess($postId)
+    {
+        if (wp_is_post_revision($postId)) {
+            return;
+        }
+
+        $homeBaseUrl = preg_replace('(^https?://)', '', home_url());
+        $homeBaseUrl = preg_replace('(^www.)', '', $homeBaseUrl);
+
+        // Add Rewrite condition
+        $rules = array(
+            '<IfModule mod_rewrite.c>',
+            'RewriteEngine on',
+            'RewriteBase /',
+            'RewriteCond %{HTTP_HOST} ^' . $homeBaseUrl . ' [OR]',
+            'RewriteCond %{HTTP_HOST} ^www.' . $homeBaseUrl
+        );
+
+        // Get redirects
+        $posts = get_posts(array(
+            'posts_per_page' => -1,
+            'post_type' => 'custom-short-link'
+        ));
+
+        // Add each rule
+        foreach ($posts as $post) {
+            $redirectTo = '';
+            $post->meta = get_fields($post->ID);
+
+            switch ($post->meta['custom_short_links_redirect_url_type']) {
+                case 'internal':
+                    $redirectTo = $post->meta['custom_short_links_redirect_to_internal'];
+                    break;
+
+                case 'external':
+                    $redirectTo = $post->meta['custom_short_links_redirect_to_external'];
+                    break;
+            }
+
+            $rules[] = 'RewriteRule ^' . $post->post_title . '$ ' . $redirectTo . ' [L,QSA,R=' . intval($fields['custom_short_links_redirect_method']) . ']';
+        }
+
+        $rules[] = '</IfModule>';
+
+        $htaccess = get_home_path() . '.htaccess';
+        insert_with_markers($htaccess, 'Custom Shortlinks for ' . $homeB§aseUrl, $rules);
     }
 
     /**
