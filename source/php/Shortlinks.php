@@ -64,6 +64,38 @@ class Shortlinks
 
     public function handleRedirect()
     {
+        global $post;
+
+        if (!isset($post) || !is_a($post, 'WP_Post') || $post->post_type != 'custom-short-link' || is_admin()) {
+            return;
+        }
+
+        $fields = get_fields($post->ID);
+        $redirectTo = null;
+
+
+        switch ($fields['custom_short_links_redirect_url_type']) {
+            case 'external':
+                $redirectTo = $fields['custom_short_links_redirect_to_external'];
+                break;
+
+            case 'internal':
+                $redirectTo = $fields['custom_short_links_redirect_to_internal'];
+                break;
+        }
+
+        switch ($fields['custom_short_links_redirect_method']) {
+            case 'meta':
+                add_action('wp_head', function () use ($fields, $redirectTo) {
+                    echo '<meta http-equiv="refresh" content="' . $fields['custom_short_links_timeout'] . ';URL=' . $redirectTo . '">';
+                });
+                break;
+
+            // 301 or 302
+            default:
+                header('Location: ' . $redirectTo, true, intval($fields['custom_short_links_redirect_method']));
+                break;
+        }
 
     }
 
