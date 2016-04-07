@@ -10,18 +10,18 @@ CustomShortLinks.Screen.Edit = (function ($) {
 
     function Edit() {
         $(function(){
-            // this.handleEvents();
+            this.handleEvents();
         }.bind(this));
     }
 
     Edit.prototype.handleEvents = function () {
-        $('#title').on('input', function (e) {
-            isTyping = true;
+        $('#title').on('keyup', function (e) {
+            var val = $(e.target).val();
 
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(function () {
-                $('#title').blur();
-            }, 1000);
+            val = val.replace(/\s/g, '-');
+            val = val.replace(/[^a-zA-Z0-9_-]/g, '');
+
+            $(e.target).val(val);
         }.bind(this));
     };
 

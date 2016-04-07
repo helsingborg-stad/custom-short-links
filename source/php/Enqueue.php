@@ -26,7 +26,7 @@ class Enqueue
         }
 
         wp_dequeue_script('autosave');
-        //wp_enqueue_script('custom-short-links', CUSTOMSHORTLINKS_URL . '/dist/js/custom-short-links.min.js', array('jquery'), '1.0.0', true);
+        wp_enqueue_script('custom-short-links', CUSTOMSHORTLINKS_URL . '/dist/js/custom-short-links.min.js', array('jquery'), '1.0.0', true);
     }
 
     public function shouldEnqueue()
