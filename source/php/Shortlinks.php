@@ -60,6 +60,69 @@ class Shortlinks
         );
 
         register_post_type('custom-short-link', $args);
+
+        add_filter('manage_edit-custom-short-link_columns', array($this, 'listColumns'));
+        add_action('manage_custom-short-link_posts_custom_column', array($this, 'listColumnsContent'), 10, 2);
+        add_filter('manage_edit-custom-short-link_sortable_columns', array($this, 'listColumnsSorting'));
+    }
+
+    public function listColumns($columns)
+    {
+        $columns = array(
+            'cb'     => '<input type="checkbox">',
+            'title'  => __('Shortlink'),
+            'target' => __('Target'),
+            'type'   => __('Type'),
+            'date'   => __('Date')
+        );
+
+        return $columns;
+    }
+
+    public function listColumnsContent($column, $postId)
+    {
+        if ($column == 'target') {
+            $fields = get_fields($postId);
+
+            switch ($fields['custom_short_links_redirect_url_type']) {
+                case 'external':
+                    echo $fields['custom_short_links_redirect_to_external'];
+                    break;
+
+                case 'internal':
+                    echo $fields['custom_short_links_redirect_to_internal'];
+                    break;
+            }
+        }
+
+        if ($column == 'type') {
+            $fields = get_fields($postId);
+
+            switch ($fields['custom_short_links_redirect_method']) {
+                case '301':
+                    echo '302 Moved Permanently';
+                    break;
+
+                case '302':
+                    echo '302 Moved Temporarily';
+                    break;
+
+                case 'meta':
+                    echo 'Meta Refresh';
+                    break;
+
+                default:
+                    echo $fields['custom_short_links_redirect_method'];
+                    break;
+            }
+        }
+    }
+
+    public function listColumnsSorting($columns)
+    {
+        $columns['target'] = 'target';
+        $columns['type'] = 'type';
+        return $columns;
     }
 
     /**
