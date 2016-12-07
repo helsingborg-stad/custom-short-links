@@ -35,7 +35,7 @@ class Shortlinks
             'new_item'           => sprintf(__('New %s', 'custom-short-links'), $nameSingular),
             'edit_item'          => sprintf(__('Edit %s', 'custom-short-links'), $nameSingular),
             'view_item'          => sprintf(__('View %s', 'custom-short-links'), $nameSingular),
-            'all_items'          => sprintf(__('All %s', 'custom-short-links'), $namePlural),
+            'all_items'          => sprintf(__('%s', 'custom-short-links'), $namePlural),
             'search_items'       => sprintf(__('Search %s', 'custom-short-links'), $namePlural),
             'parent_item_colon'  => sprintf(__('Parent %s', 'custom-short-links'), $namePlural),
             'not_found'          => sprintf(__('No %s', 'custom-short-links'), $namePlural),
