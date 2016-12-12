@@ -49,7 +49,7 @@ class Shortlinks
             'publicly_queriable'   => false,
             'show_ui'              => true,
             'show_in_nav_menus'    => false,
-            'show_in_menu'         => 'tools.php',
+            'show_in_menu'         => 'options-general.php',
             'has_archive'          => false,
             'rewrite'              => false,
             'hierarchical'         => false,
