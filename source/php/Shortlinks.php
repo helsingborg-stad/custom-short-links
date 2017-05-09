@@ -100,7 +100,7 @@ class Shortlinks
 
             switch ($fields['custom_short_links_redirect_method']) {
                 case '301':
-                    echo '302 Moved Permanently';
+                    echo '301 Moved Permanently';
                     break;
 
                 case '302':
