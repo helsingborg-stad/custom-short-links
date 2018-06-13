@@ -131,7 +131,7 @@ class Shortlinks
      */
     public function simpleRedirect()
     {
-        $currentUrl = trim($_SERVER['REQUEST_URI'], '/');
+        $currentUrl = trim(substr($_SERVER['REQUEST_URI'], strrpos($_SERVER['REQUEST_URI'], '/') + 1), '/');
         $post = get_page_by_title($currentUrl, 'OBJECT', 'custom-short-link');
 
         if (!$post) {
