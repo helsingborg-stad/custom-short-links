@@ -9,10 +9,9 @@ class Shortlinks
         add_action('init', array($this, 'registerPostType'));
         add_action('wp', array($this, 'simpleRedirect'));
         // add_action('save_post_custom-short-link', array($this, 'writeToHtaccess'));
-
         add_action('edit_form_after_title', array($this, 'afterTitle'));
-
         add_filter('enter_title_here', array($this, 'titlePlaceholder'));
+        add_filter('wp_insert_post_data', array($this, 'sanitizeTitle'), 10, 2);
     }
 
     /**
@@ -262,5 +261,20 @@ class Shortlinks
         } elseif ($screen->action == 'add') {
             echo '<div id="edit-slug-box"></div>';
         }
+    }
+
+    /**
+     * Remove slashes from shortlink title
+     * @param array $data       An array of slashed post data
+     * @param array $postarr    An array of sanitized, but otherwise unmodified post data
+     * @return array            Modified post data
+     */
+    public function sanitizeTitle($data, $postarr)
+    {
+        if ($data['post_type'] === 'custom-short-link') {
+            $data['post_title'] = trim($data['post_title'], '/');
+        }
+
+        return $data;
     }
 }
