@@ -131,8 +131,12 @@ class Shortlinks
      */
     public function simpleRedirect()
     {
-        $currentUrl = trim(substr($_SERVER['REQUEST_URI'], strrpos($_SERVER['REQUEST_URI'], '/') + 1), '/');
-        $post = get_page_by_title($currentUrl, 'OBJECT', 'custom-short-link');
+        global $wp;
+        if (!$request = $wp->request) {
+            return;
+        }
+        $currentSlug = add_query_arg(array(), $request);
+        $post = get_page_by_title($currentSlug, 'OBJECT', 'custom-short-link');
 
         if (!$post) {
             return;
