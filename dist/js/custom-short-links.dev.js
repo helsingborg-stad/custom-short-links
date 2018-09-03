@@ -9,7 +9,7 @@ CustomShortLinks.Screen.Edit = (function ($) {
     var isTyping = false;
 
     function Edit() {
-        $(function(){
+        $(function () {
             this.handleEvents();
         }.bind(this));
     }
@@ -19,9 +19,10 @@ CustomShortLinks.Screen.Edit = (function ($) {
             var val = $(e.target).val();
 
             val = val.toLowerCase().replace(/\s/g, '-')
-                     .replace(/[áåä]/, 'a')
-                     .replace(/[ö]/, 'o')
-                     .replace(/[^a-zA-Z0-9_-]/g, '');
+                .replace(/[áåä]/, 'a')
+                .replace(/[ö]/, 'o')
+                .replace(/[^a-zA-Z0-9_\/-]/g, '')
+                .replace(/^\/+/g, '');
 
             $(e.target).val(val);
 
