@@ -24,14 +24,11 @@ define('CUSTOMSHORTLINKS_TEMPLATE_PATH', CUSTOMSHORTLINKS_PATH . 'templates/');
 
 load_plugin_textdomain('custom-short-links', false, plugin_basename(dirname(__FILE__)) . '/languages');
 
-require_once CUSTOMSHORTLINKS_PATH . 'source/php/Vendor/Psr4ClassLoader.php';
+// Autoload from plugin
+if (file_exists(CUSTOMSHORTLINKS_PATH . 'vendor/autoload.php')) {
+    require_once CUSTOMSHORTLINKS_PATH . 'vendor/autoload.php';
+}
 require_once CUSTOMSHORTLINKS_PATH . 'Public.php';
-
-// Instantiate and register the autoloader
-$loader = new CustomShortLinks\Vendor\Psr4ClassLoader();
-$loader->addPrefix('CustomShortLinks', CUSTOMSHORTLINKS_PATH);
-$loader->addPrefix('CustomShortLinks', CUSTOMSHORTLINKS_PATH . 'source/php/');
-$loader->register();
 
 // Start application
 new CustomShortLinks\App();
