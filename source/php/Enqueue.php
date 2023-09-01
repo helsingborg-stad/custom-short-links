@@ -6,17 +6,7 @@ class Enqueue
 {
     public function __construct()
     {
-        add_action('admin_enqueue_scripts', array($this, 'enqueueStyles'));
         add_action('admin_enqueue_scripts', array($this, 'enqueueScripts'));
-    }
-
-    public function enqueueStyles()
-    {
-        if (!$this->shouldEnqueue()) {
-            return;
-        }
-
-        wp_enqueue_style('custom-short-links', CUSTOMSHORTLINKS_URL . '/dist/css/custom-short-links.min.css');
     }
 
     public function enqueueScripts()
@@ -26,7 +16,9 @@ class Enqueue
         }
 
         wp_dequeue_script('autosave');
-        wp_enqueue_script('custom-short-links', CUSTOMSHORTLINKS_URL . '/dist/js/custom-short-links.min.js', array('jquery'), '1.0.0', true);
+        wp_enqueue_script('custom-short-links', CUSTOMSHORTLINKS_URL . '/dist/'
+        .\CustomShortLinks\Helper\CacheBust::name('js/custom-short-links.js'),
+        array(), '1.0.0');
         wp_localize_script('custom-short-links', 'CustomShortLinksVars', array(
             'home_url' => home_url(),
             'shortlink' => __('Shortlink', 'custom-short-links')
