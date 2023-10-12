@@ -2,6 +2,8 @@
 
 namespace CustomShortLinks;
 
+use WP_Query;
+
 class Shortlinks
 {
     public function __construct()
@@ -125,6 +127,33 @@ class Shortlinks
     }
 
     /**
+     * Get page by title
+     *
+     * @param  string $title    Title of the page
+     * @param  string $postType Post type to search in
+     * @return WP_Post|null
+     */
+    private function getPageByTitle(string $title, string $postType = 'page')
+    {
+        $query = new WP_Query(
+            array(
+                'post_type'              => $postType,
+                'title'                  => $title,
+                'post_status'            => 'any',
+                'posts_per_page'         => 1,
+                'no_found_rows'          => true,
+                'ignore_sticky_posts'    => true,
+                'update_post_term_cache' => false,
+                'update_post_meta_cache' => false,
+                'orderby'                => 'post_date ID',
+                'order'                  => 'ASC',
+            )
+        );
+
+        return (empty($query->post)) ? null : $query->post;
+    }
+
+    /**
      * Make a simple PHP redirect to the target page
      * @return void
      */
@@ -135,7 +164,7 @@ class Shortlinks
             return;
         }
         $currentSlug = add_query_arg(array(), $request);
-        $post = get_page_by_title($currentSlug, 'OBJECT', 'custom-short-link');
+        $post = $this->getPageByTitle($currentSlug, 'custom-short-link');
 
         if (!$post) {
             return;
