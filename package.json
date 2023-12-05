@@ -1,6 +1,6 @@
 {
     "name": "custom-short-links",
-    "version": "3.0.3",
+    "version": "3.0.4",
     "description": "Create short links for urls",
     "main": "",
     "scripts": {
