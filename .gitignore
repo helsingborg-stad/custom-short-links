@@ -54,5 +54,6 @@ Thumbs.db
 # -------------------------
 
 # track these files, if they exist
+!.github
 !.gitignore
 !.editorconfig
