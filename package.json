@@ -1,6 +1,6 @@
 {
     "name": "@helsingborg-stad/custom-short-links",
-    "version": "3.0.4",
+    "version": "3.0.5",
     "description": "Create short links for urls",
     "main": "",
     "scripts": {
@@ -20,7 +20,9 @@
         "> 1%",
         "not dead"
     ],
-    "files": ["dist/"],
+    "files": [
+        "dist/"
+    ],
     "devDependencies": {
         "@babel/core": "^7.11.0",
         "@babel/plugin-proposal-class-properties": "^7.10.4",
