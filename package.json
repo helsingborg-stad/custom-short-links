@@ -1,6 +1,6 @@
 {
     "name": "@helsingborg-stad/custom-short-links",
-    "version": "3.0.5",
+    "version": "3.0.6",
     "description": "Create short links for urls",
     "main": "",
     "scripts": {
