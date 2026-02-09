@@ -1,13 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
+
 namespace CustomShortLinks;
+
+use WpUtilService\Features\Enqueue\EnqueueManager;
 
 class App
 {
-    public function __construct()
-    {
+    public function __construct(
+        EnqueueManager $wpEnqueue,
+    ) {
         new \CustomShortLinks\Shortlinks();
-        new \CustomShortLinks\Enqueue();
+        new \CustomShortLinks\Enqueue($wpEnqueue);
 
         add_action('init', array($this, 'init'));
         add_filter('acf/settings/load_json', array($this, 'jsonLoadPath'));

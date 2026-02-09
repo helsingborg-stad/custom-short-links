@@ -1,5 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
+
 namespace CustomShortLinks;
 
 use WP_Query;
@@ -27,37 +30,37 @@ class Shortlinks
         $description = 'Create shortlinks to your posts or pages';
 
         $labels = array(
-            'name'               => _x($nameSingular, 'post type general name', 'custom-short-links'),
-            'singular_name'      => _x($nameSingular, 'post type singular name', 'custom-short-links'),
-            'menu_name'          => _x($namePlural, 'admin menu', 'custom-short-links'),
-            'name_admin_bar'     => _x($nameSingular, 'add new on admin bar', 'custom-short-links'),
-            'add_new'            => _x('Add New', 'add new button', 'custom-short-links'),
-            'add_new_item'       => sprintf(__('Add new %s', 'custom-short-links'), $nameSingular),
-            'new_item'           => sprintf(__('New %s', 'custom-short-links'), $nameSingular),
-            'edit_item'          => sprintf(__('Edit %s', 'custom-short-links'), $nameSingular),
-            'view_item'          => sprintf(__('View %s', 'custom-short-links'), $nameSingular),
-            'all_items'          => sprintf(__('%s', 'custom-short-links'), $namePlural),
-            'search_items'       => sprintf(__('Search %s', 'custom-short-links'), $namePlural),
-            'parent_item_colon'  => sprintf(__('Parent %s', 'custom-short-links'), $namePlural),
-            'not_found'          => sprintf(__('No %s', 'custom-short-links'), $namePlural),
-            'not_found_in_trash' => sprintf(__('No %s in trash', 'custom-short-links'), $namePlural)
+            'name' => _x($nameSingular, 'post type general name', 'custom-short-links'),
+            'singular_name' => _x($nameSingular, 'post type singular name', 'custom-short-links'),
+            'menu_name' => _x($namePlural, 'admin menu', 'custom-short-links'),
+            'name_admin_bar' => _x($nameSingular, 'add new on admin bar', 'custom-short-links'),
+            'add_new' => _x('Add New', 'add new button', 'custom-short-links'),
+            'add_new_item' => sprintf(__('Add new %s', 'custom-short-links'), $nameSingular),
+            'new_item' => sprintf(__('New %s', 'custom-short-links'), $nameSingular),
+            'edit_item' => sprintf(__('Edit %s', 'custom-short-links'), $nameSingular),
+            'view_item' => sprintf(__('View %s', 'custom-short-links'), $nameSingular),
+            'all_items' => sprintf(__('%s', 'custom-short-links'), $namePlural),
+            'search_items' => sprintf(__('Search %s', 'custom-short-links'), $namePlural),
+            'parent_item_colon' => sprintf(__('Parent %s', 'custom-short-links'), $namePlural),
+            'not_found' => sprintf(__('No %s', 'custom-short-links'), $namePlural),
+            'not_found_in_trash' => sprintf(__('No %s in trash', 'custom-short-links'), $namePlural),
         );
 
         $args = array(
-            'labels'               => $labels,
-            'description'          => __($description, 'custom-short-links'),
-            'public'               => false,
-            'publicly_queriable'   => false,
-            'show_ui'              => true,
-            'show_in_nav_menus'    => false,
-            'show_in_menu'         => 'options-general.php',
-            'has_archive'          => false,
-            'rewrite'              => false,
-            'hierarchical'         => false,
-            'menu_position'        => 100,
-            'exclude_from_search'  => true,
-            'menu_icon'            => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiB2aWV3Qm94PSIwIDAgNDguMTU1IDQ4LjE1NSI+PHBhdGggZD0iTTM2Ljg1IDI0LjY1Nmw5LjUwNC05LjUwM0wzNi44NSA1LjY1SDI0LjA4di00LjZjMC0uNTc3LS40NzMtMS4wNS0xLjA1LTEuMDVIMTkuMjRjLS41NzggMC0xLjA1LjQ3My0xLjA1IDEuMDV2NC42SDIuM2EuNS41IDAgMCAwLS41LjV2MTguMDA3YS41LjUgMCAwIDAgLjUuNWgxNS44OXYzLjczaC01Ljg4bC00Ljc1MiA0Ljc1IDQuNzUyIDQuNzUzaDUuODh2OS4yMTRjMCAuNTc3LjQ3MiAxLjA1MiAxLjA1IDEuMDUyaDMuNzg1Yy41NzggMCAxLjA1LS40NzUgMS4wNS0xLjA1MlYzNy44OWg3LjI2YS41LjUgMCAwIDAgLjUtLjV2LTguNTA0YS41LjUgMCAwIDAtLjUtLjVoLTcuMjZ2LTMuNzNoMTIuNzc0eiIgZmlsbD0iIzk5OSIvPjwvc3ZnPg==',
-            'supports'             => array('title')
+            'labels' => $labels,
+            'description' => __($description, 'custom-short-links'),
+            'public' => false,
+            'publicly_queriable' => false,
+            'show_ui' => true,
+            'show_in_nav_menus' => false,
+            'show_in_menu' => 'options-general.php',
+            'has_archive' => false,
+            'rewrite' => false,
+            'hierarchical' => false,
+            'menu_position' => 100,
+            'exclude_from_search' => true,
+            'menu_icon' => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiB2aWV3Qm94PSIwIDAgNDguMTU1IDQ4LjE1NSI+PHBhdGggZD0iTTM2Ljg1IDI0LjY1Nmw5LjUwNC05LjUwM0wzNi44NSA1LjY1SDI0LjA4di00LjZjMC0uNTc3LS40NzMtMS4wNS0xLjA1LTEuMDVIMTkuMjRjLS41NzggMC0xLjA1LjQ3My0xLjA1IDEuMDV2NC42SDIuM2EuNS41IDAgMCAwLS41LjV2MTguMDA3YS41LjUgMCAwIDAgLjUuNWgxNS44OXYzLjczaC01Ljg4bC00Ljc1MiA0Ljc1IDQuNzUyIDQuNzUzaDUuODh2OS4yMTRjMCAuNTc3LjQ3MiAxLjA1MiAxLjA1IDEuMDUyaDMuNzg1Yy41NzggMCAxLjA1LS40NzUgMS4wNS0xLjA1MlYzNy44OWg3LjI2YS41LjUgMCAwIDAgLjUtLjV2LTguNTA0YS41LjUgMCAwIDAtLjUtLjVoLTcuMjZ2LTMuNzNoMTIuNzc0eiIgZmlsbD0iIzk5OSIvPjwvc3ZnPg==',
+            'supports' => array('title'),
         );
 
         register_post_type('custom-short-link', $args);
@@ -69,15 +72,13 @@ class Shortlinks
 
     public function listColumns($columns)
     {
-        $columns = array(
-            'cb'     => '<input type="checkbox">',
-            'title'  => __('Shortlink'),
+        return array(
+            'cb' => '<input type="checkbox">',
+            'title' => __('Shortlink'),
             'target' => __('Target'),
-            'type'   => __('Type'),
-            'date'   => __('Date')
+            'type' => __('Type'),
+            'date' => __('Date'),
         );
-
-        return $columns;
     }
 
     public function listColumnsContent($column, $postId)
@@ -137,20 +138,20 @@ class Shortlinks
     {
         $query = new WP_Query(
             array(
-                'post_type'              => $postType,
-                'title'                  => $title,
-                'post_status'            => 'any',
-                'posts_per_page'         => 1,
-                'no_found_rows'          => true,
-                'ignore_sticky_posts'    => true,
+                'post_type' => $postType,
+                'title' => $title,
+                'post_status' => 'any',
+                'posts_per_page' => 1,
+                'no_found_rows' => true,
+                'ignore_sticky_posts' => true,
                 'update_post_term_cache' => false,
                 'update_post_meta_cache' => false,
-                'orderby'                => 'post_date ID',
-                'order'                  => 'ASC',
-            )
+                'orderby' => 'post_date ID',
+                'order' => 'ASC',
+            ),
         );
 
-        return (empty($query->post)) ? null : $query->post;
+        return empty($query->post) ? null : $query->post;
     }
 
     /**
@@ -160,7 +161,7 @@ class Shortlinks
     public function simpleRedirect()
     {
         global $wp;
-        if (!$request = $wp->request) {
+        if (!($request = $wp->request)) {
             return;
         }
         $currentSlug = add_query_arg(array(), $request);
@@ -187,7 +188,7 @@ class Shortlinks
         // Make redirect with selected method
         switch ($fields['custom_short_links_redirect_method']) {
             case 'meta':
-                add_action('wp_head', function () use ($fields, $redirectTo) {
+                add_action('wp_head', static function () use ($fields, $redirectTo) {
                     echo '<meta http-equiv="refresh" content="' . $fields['custom_short_links_timeout'] . ';URL=' . $redirectTo . '">';
                 });
                 break;
@@ -225,13 +226,13 @@ class Shortlinks
             'RewriteEngine on',
             'RewriteBase /',
             'RewriteCond %{HTTP_HOST} ^' . $homeBaseUrl . ' [OR]',
-            'RewriteCond %{HTTP_HOST} ^www.' . $homeBaseUrl
+            'RewriteCond %{HTTP_HOST} ^www.' . $homeBaseUrl,
         );
 
         // Get redirects
         $posts = get_posts(array(
             'posts_per_page' => -1,
-            'post_type' => 'custom-short-link'
+            'post_type' => 'custom-short-link',
         ));
 
         // Add each rule

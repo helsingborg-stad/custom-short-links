@@ -1,11 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+
 namespace CustomShortLinks;
+
+use WpUtilService\Features\Enqueue\EnqueueManager;
 
 class Enqueue
 {
-    public function __construct()
-    {
+    public function __construct(
+        private EnqueueManager $wpEnqueue,
+    ) {
         add_action('admin_enqueue_scripts', array($this, 'enqueueScripts'));
     }
 
@@ -14,22 +20,21 @@ class Enqueue
         if (!$this->shouldEnqueue()) {
             return;
         }
-
         wp_dequeue_script('autosave');
-        wp_enqueue_script('custom-short-links', CUSTOMSHORTLINKS_URL . '/dist/'
-        .\CustomShortLinks\Helper\CacheBust::name('js/custom-short-links.js'),
-        array(), '1.0.0');
-        wp_localize_script('custom-short-links', 'CustomShortLinksVars', array(
-            'home_url' => home_url(),
-            'shortlink' => __('Shortlink', 'custom-short-links')
-        ));
+        $this->wpEnqueue
+            ->add('js/custom-short-links.js', [], '1.0.0')
+            ->with()
+            ->translation('CustomShortLinksVars', array(
+                'home_url' => home_url(),
+                'shortlink' => __('Shortlink', 'custom-short-links'),
+            ));
     }
 
     public function shouldEnqueue()
     {
         $screen = get_current_screen();
 
-        if ($screen->post_type == 'custom-short-link' && ($screen->action == 'add' || (isset($_GET['action']) && $_GET['action'] == 'edit'))) {
+        if ($screen->post_type == 'custom-short-link' && ($screen->action == 'add' || isset($_GET['action']) && $_GET['action'] == 'edit')) {
             return true;
         }
 
