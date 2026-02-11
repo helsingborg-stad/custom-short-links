@@ -2,37 +2,41 @@ var CustomShortLinks = {};
 CustomShortLinks = CustomShortLinks || {};
 CustomShortLinks.Screen = CustomShortLinks.Screen || {};
 
-CustomShortLinks.Screen.Edit = (function ($) {
+CustomShortLinks.Screen.Edit = (($) => {
+	function Edit() {
+		$(
+			function () {
+				this.handleEvents();
+			}.bind(this),
+		);
+	}
 
-    var typingTimer = false;
-    var isTyping = false;
+	Edit.prototype.handleEvents = function () {
+		$('#title').on(
+			'keyup',
+			((e) => {
+				var val = $(e.target).val();
 
-    function Edit() {
-        $(function () {
-            this.handleEvents();
-        }.bind(this));
-    }
+				val = val
+					.toLowerCase()
+					.replace(/\s/g, '-')
+					.replace(/[áåä]/, 'a')
+					.replace(/[ö]/, 'o')
+					.replace(/[^a-zA-Z0-9_/-]/g, '')
+					.replace(/^\/+/g, '');
 
-    Edit.prototype.handleEvents = function () {
-        $('#title').on('keyup', function (e) {
-            var val = $(e.target).val();
+				$(e.target).val(val);
 
-            val = val.toLowerCase().replace(/\s/g, '-')
-                .replace(/[áåä]/, 'a')
-                .replace(/[ö]/, 'o')
-                .replace(/[^a-zA-Z0-9_\/-]/g, '')
-                .replace(/^\/+/g, '');
+				if (val.length > 0) {
+					$('#edit-slug-box').html(
+						'<strong>' + CustomShortLinksVars.shortlink + ':</strong> ' + CustomShortLinksVars.home_url + '/' + val,
+					);
+				} else {
+					$('#edit-slug-box').empty();
+				}
+			}).bind(this),
+		);
+	};
 
-            $(e.target).val(val);
-
-            if (val.length > 0) {
-                $('#edit-slug-box').html('<strong>' + CustomShortLinksVars.shortlink + ':</strong> ' + CustomShortLinksVars.home_url + '/' + val);
-            } else {
-                $('#edit-slug-box').empty();
-            }
-        }.bind(this));
-    };
-
-    return new Edit();
-
+	return new Edit();
 })(jQuery);

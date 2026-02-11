@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /*
-Plugin Name: ACF Json Sync file doctor
-Description: Checks if ACF json export files (that should be imported with Json Sync) is in correct format. If not, the plugin will try to fix any errors.
-Version:     1.0
-Author:      Kristoffer Svanmark
-*/
+ * Plugin Name: ACF Json Sync file doctor
+ * Description: Checks if ACF json export files (that should be imported with Json Sync) is in correct format. If not, the plugin will try to fix any errors.
+ * Version:     1.0
+ * Author:      Kristoffer Svanmark
+ */
 
 namespace AcfImportCleaner;
 

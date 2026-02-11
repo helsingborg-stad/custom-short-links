@@ -12,10 +12,12 @@
  * Text Domain:       custom-short-links
  * Domain Path:       /languages
  */
+use WpService\Implementations\NativeWpService;
+use WpUtilService\WpUtilService;
 
- // Protect agains direct file access
+// Protect agains direct file access
 if (!defined('WPINC')) {
-    die;
+    die();
 }
 
 define('CUSTOMSHORTLINKS_PATH', plugin_dir_path(__FILE__));
@@ -30,5 +32,8 @@ if (file_exists(CUSTOMSHORTLINKS_PATH . 'vendor/autoload.php')) {
 }
 require_once CUSTOMSHORTLINKS_PATH . 'Public.php';
 
+$wpService = new NativeWpService();
+$wpUtilService = new WpUtilService($wpService);
+
 // Start application
-new CustomShortLinks\App();
+new CustomShortLinks\App($wpUtilService->enqueue(__DIR__));
