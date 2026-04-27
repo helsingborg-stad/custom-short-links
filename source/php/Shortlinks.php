@@ -134,7 +134,7 @@ class Shortlinks
      * @param  string $postType Post type to search in
      * @return WP_Post|null
      */
-    private function getPageByTitle(string $title, string $postType = 'page')
+    protected function getPageByTitle(string $title, string $postType = 'page')
     {
         $query = new WP_Query(
             array(
@@ -303,6 +303,15 @@ class Shortlinks
     {
         if ($data['post_type'] === 'custom-short-link') {
             $data['post_title'] = trim($data['post_title'], '/');
+
+            if ($data['post_title'] !== '') {
+                $existingPost = $this->getPageByTitle($data['post_title'], 'custom-short-link');
+                $currentPostId = isset($postarr['ID']) ? (int) $postarr['ID'] : 0;
+
+                if ($existingPost && (int) $existingPost->ID !== $currentPostId) {
+                    wp_die(__('Short links must be unique.', 'custom-short-links'));
+                }
+            }
         }
 
         return $data;
