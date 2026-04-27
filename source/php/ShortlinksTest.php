@@ -38,6 +38,9 @@ final class WpDieException extends RuntimeException
  */
 final class TestableShortlinks extends Shortlinks
 {
+    /**
+     * Intentionally skips the parent constructor to avoid registering WordPress hooks in unit tests.
+     */
     public function __construct(
         private readonly ?object $existingPost = null,
     ) {
@@ -55,6 +58,12 @@ final class TestableShortlinks extends Shortlinks
 final class ShortlinksTest extends TestCase
 {
     protected function setUp(): void
+    {
+        TranslationSpy::$message = '';
+        TranslationSpy::$domain = '';
+    }
+
+    protected function tearDown(): void
     {
         TranslationSpy::$message = '';
         TranslationSpy::$domain = '';
