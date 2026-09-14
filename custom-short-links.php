@@ -4,7 +4,7 @@
  * Plugin Name:       Custom Short Links
  * Plugin URI:
  * Description:       Create short links for urls
- * Version: 3.0.10
+ * Version: 3.1.0
  * Author:            Kristoffer Svanmark
  * Author URI:
  * License:           MIT
